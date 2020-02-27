@@ -1,0 +1,66 @@
+---
+title: "README"
+author: "Huf"
+date: "2/27/2020"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Description
+
+This is a simple project where Huf and Eldyn will work together to learn about R, Git, and GitHub. A virtual machine has been set up [here](http://ec2-18-216-81-128.us-east-2.compute.amazonaws.com:8787/).
+
+This README was created using R Markdown (Rmd). With Rmd you can create pdf, html, or word documents that contain R scripts and outputs. For example:
+
+```{r printStatement}
+print("Hello, world.")
+```
+
+You can also include plots!
+
+```{r plot, echo=FALSE, message = FALSE, warning = FALSE}
+# Load {dplyr} to get access to the 'pipe operator' %>%
+library(dplyr)
+
+# Enumerate the x-axis points
+x <- 0:100/100 * 2 * base::pi
+
+# Create a function to convert x-axis values in radians in a pretty format
+pi_scales <- scales::math_format(.x * pi, format = function(x) x / base::pi)
+
+##### NOTE THAT LINES 11-40 ARE ALL ONE COMMAND (CONNECTED BY PIPE OPERATORS) #####
+# Create a data.frame() object to be used by {ggplot}
+data.frame(x = x,
+           s = base::sin(x),
+           c = base::cos(x)) %>%
+  
+  # Gather the data into a 'tidy' format. SEE https://r4ds.had.co.nz/tidy-data.html
+  tidyr::gather("type", "y", -x) %>%
+  
+  # Initiate a ggplot object, set x, y, and color columns
+  ggplot2::ggplot(ggplot2::aes(x = x,
+                               y = y,
+                               color = type)) +
+  
+  # Plot the lines
+  ggplot2::geom_line() +
+  
+  # X-axis labels and breaks
+  ggplot2::scale_x_continuous(labels = pi_scales,
+                              breaks = seq(0, 2*base::pi, base::pi/4)) + 
+  
+  # Title, axes, citation
+  ggplot2::labs(title = "Cosine and Sine Values of a Unit Circle",
+                y = "Value",
+                x = "Radians",
+                caption = "Source: Huf") +
+  
+  # Legend
+  ggplot2::scale_color_manual(name = "", 
+                              labels = c("cos(x)", "sin(x)"),
+                              values = c("blue", "red"))
+
+```
